@@ -1,0 +1,22 @@
+{
+  "name": "new-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "ip": "^1.1.5",
+    "modern-random-ua": "^1.0.3",
+    "puppeteer": "^1.20.0",
+    "puppeteer-extra": "^2.1.6",
+    "puppeteer-extra-plugin-stealth": "^2.9.0",
+    "simple-proxies": "^1.0.3",
+    "winston": "^3.2.1",
+    "yargs": "^14.0.0"
+  }
+}
