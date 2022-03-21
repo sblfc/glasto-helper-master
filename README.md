@@ -6,10 +6,6 @@ To get the proxy set up you can use https://scrapoxy.readthedocs.io/en/master/qu
 
 Some other small edits made like keep refreshing on other tabs till 5 are found, removing css, images, fonts to make loading times faster and made the refresh rate per page rather than overall. I'd like the refresh rate to be per IP but I launch 64 instances on aws and then 64 tabs so each proxy is only used once.
 
-I did not get glasto tickets. Shite wan. 
-Ran the bot on thursday coach tickets. Kept crashing when pages timed out. Still, got through. Entered reg but couldn't pick any bus tickets due to some error about not selecting the right number, seemed to happen to a lot of people on twitter. 
-Fixed the errors and made a few good improvements over the weekend. Ran on two laptops then on Sunday. Got through on both. Froze up after submitting payment. Seemed to be a common problem on twitter once again. Waited til the 10 mins on ticket lock was over and submitted on the other page. Was too late however. Sold out. 
-
 ---
 This app launches chrome via puppeteer. It opens a number of browsers set by the user. It will then iterate through each browser and load the set URL in a tab. It will only begin loading the page on the next browser tab when a certain amount of time has passed so it does not surpass the set rate limit (60 a minute on glastonbury site). 
 
