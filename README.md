@@ -21,6 +21,7 @@ You can pause by pressing the enter key on the command line. It should automatic
 
 ```--test``` : Will use ```resources/test.txt``` for comparison. For use with test site. 
 
+```--proxy``` : false or true, proxy ip and port are hard coded. line 242.
 
 ## To run
 ```
@@ -28,7 +29,8 @@ npm i
 ```
 Example run command:
 ```
-node main.js --site="https://glastonbury.seetickets.com" --rate-limit=55 --max-tabs=15
+node main.js --site="https://glastonbury.seetickets.com/content/extras" --rate-limit=55 --max-tabs=3 --proxy=false \\ no proxy
+node main.js --site="https://glastonbury.seetickets.com/content/extras" --rate-limit=55 --max-tabs=3 --proxy=true \\ proxy
 ```
 ## Testing
 Test site from https://github.com/thomasms/testsites
@@ -44,7 +46,3 @@ node main.js --site="localhost:3000" --rate-limit=55 --max-tabs=15 --test
 
 When it loads the 20th page it pretends it is in. Runs on localhost:3000
 
-
-
-### What next?
-Scalability. How could this scale? It's currently close to maxing out the potential for one device. Not sure how to do this. I think being able to deploy to a few instances, they would need to use a VPN to avoid the IP being identified as being in the cloud providers IP range. Would need some way to get the most similar tab back to the user so details could be entered. Feeding back results and allowing use to select a tab, then tunnel the port back to the user app. Complex. Pass the session and vpn used back? How could this be done simpler? Is it ethical to scale?
