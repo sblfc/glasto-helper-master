@@ -1,6 +1,12 @@
 # glasto-bot
 
-This is a proxy fork of the glasto helper. It will launch a new instance with the proxy.
+Glasto-helper was made by jackohara to help users get Glastonbury Festival tickets, it will launch as many seperate, temporary instances as you specify with the tabs command. Each tab uses a different proxy so can be refreshed upto 55 times a second. With digital ocean and amazon web services you can have a total of 210 proxies using scraproxy, thus allowing 210 tabs if your pc/server has enough horsepower to open that many tabs and still be fast. This means there is a theoretical 11550 requests a min, more can be added with more cloud server providers that have an api for scaling. A powerful windows server can be rented for half an hour to run this for cheap if none has a decent pc.
+
+This has worked for me and I've got though 5 times after a few mins. I don't know if this was luck/not as many people trying for resale or, it actually worked, but I got in before my friends.
+
+---
+
+This is a proxy fork of the glasto helper. It will launch a new instance with the proxy. 
 
 To get the proxy set up you can use https://scrapoxy.readthedocs.io/en/master/quick_start/index.html. 
 
