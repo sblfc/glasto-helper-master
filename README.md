@@ -10,6 +10,8 @@ This is a proxy fork of the glasto helper. It will launch a new instance with th
 
 To get the proxy set up you can use https://scrapoxy.readthedocs.io/en/master/quick_start/index.html. 
 
+To add your registration info edit line 60 in main.js.
+
 Some other small edits made like keep refreshing on other tabs till 5 are found, removing css, images, fonts to make loading times faster and made the refresh rate per page rather than overall. I'd like the refresh rate to be per IP but I launch 64 instances on aws and then 64 tabs so each proxy is only used once.
 
 ---
