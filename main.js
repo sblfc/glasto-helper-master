@@ -47,15 +47,17 @@ Other:
 */
 
 class Puppets {
-    constructor(url, rateLimitPerMinute, maxTabs, registrationPageInnerText) {
+    constructor(url, rateLimitPerMinute, maxTabs, registrationPageInnerText, proxy) {
         this.tabs = [];
         this.url = url;
         this.refreshRateInMs = ((60 / rateLimitPerMinute) * 1000) / maxTabs;
         this.registrationPageInnerText = registrationPageInnerText;
         this.paused = false;
         this.foundCount = 0;
-        this.similarityThreshold = 80;
+        this.similarityThreshold = 50;
         this.lastHighScorer = -1;
+        this.proxy = proxy;
+        this.registrationInfo = {123454 : "l17 7DJ", 8484848837: "l17 7DT"};
     }
 
     setPaused(paused) {
@@ -74,7 +76,7 @@ class Puppets {
     async initializeTabs(tabQuantity) {
         this.tabs = [];
         for (let i = 0; i < tabQuantity; i++) {
-            let tab = new Tab(this.url);
+            let tab = new Tab(this.url, this.proxy)
             await tab.initialiseTab();
             this.tabs.push(tab);
         }
@@ -82,7 +84,7 @@ class Puppets {
 
     async restartTab(tabIndex) {
         await this.tabs[tabIndex].close();
-        let tab = new Tab(this.url);
+        let tab = new Tab(this.url, this.proxy);
         this.tabs[tabIndex] = tab;
         await this.tabs[tabIndex].initialiseTab();
     }
@@ -155,7 +157,7 @@ class Puppets {
 
                                 //Hard coded this pause as results from the coach tickets run showed the page we want has a similarity score of 91
                                 if (similarityScore > this.similarityThreshold) {
-                                    if(this.foundCount > 4) {
+                                    if(this.foundCount > 0) {
                                         this.paused = true;
                                     }else{
                                         this.foundCount = this.foundCount + 1;
@@ -164,6 +166,7 @@ class Puppets {
                                         tab: i,
                                         message: `Paused operation as page with > ${this.similarityThreshold}%, ${this.foundCount} total found`
                                     });
+                                    await this.tabs[i].enterRegInfo(this.registrationInfo);
                                 }
                                 const highestScoringTab = await this.getHighestScoringTabIndex();
                                 if(highestScoringTab != this.lastHighScorer) {
@@ -200,7 +203,7 @@ class Puppets {
 }
 
 class Tab {
-    constructor(url) {
+    constructor(url, proxy) {
         this.url = url;
         this.page = null;
         this.browser = null;
@@ -208,6 +211,7 @@ class Tab {
         this.similarityScore = -1;
         this.ready = false;
         this.startTime = null;
+        this.proxy = proxy
     }
 
     getReady() {
@@ -233,14 +237,23 @@ class Tab {
     }
 
     async initialiseTab() {
-        logger.info()
-        logger.info("Spawning new tab")
+        logger.info();
+        logger.info("Spawning new tab");
+        var proxyOption;
+        if(this.proxy == true) {
+            proxyOption = [ '--proxy-server=192.168.50.14:8888' ];
+        }else{
+            proxyOption = [];
+        }
+        logger.info("proxy = " + this.proxy);
+
         const launchOptions = {
-            args: [ '--proxy-server=192.168.50.14:8888' ],
+            args: proxyOption,
             headless: false
         };
 
         this.browser = await puppeteer.launch(launchOptions);
+
         const pages = await this.browser.pages();
 
         this.page = pages.pop();
@@ -279,6 +292,19 @@ class Tab {
         return innerHtmlTextOfAllElements;
     }
 
+    async enterRegInfo(registrationInfo) {
+        var regNumberinc = 0;
+        for (const [regNum, postCode] of Object.entries(registrationInfo)) {
+            logger.info({
+                message: `Entering reg info| Number:${regNum} Post code: ${postCode}`
+            });
+            await this.page.type(`#registrations_${+regNumberinc}__RegistrationId`, regNum);
+            await this.page.type(`#registrations_${regNumberinc}__PostCode`, postCode);
+            regNumberinc++;
+        }
+        await this.page.click('#mainRegForm > button');
+    }
+
     async evaluateSelector(selector) {
         const result = await this.page.evaluate(selector);
         return result || '';
@@ -314,7 +340,7 @@ async function run() {
     parseArgs();
     const registrationPageInnerText = await getRegistrationPageInnerText();
 
-    const tabs = new Puppets(argv['site'], argv['rate-limit'], argv['max-tabs'], registrationPageInnerText);
+    const tabs = new Puppets(argv['site'], argv['rate-limit'], argv['max-tabs'], registrationPageInnerText, argv['proxy']);
 
     // Pause/resume by pressing enter
     readline.emitKeypressEvents(process.stdin);
